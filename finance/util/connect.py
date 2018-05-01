@@ -1,28 +1,35 @@
 import pymysql
+from pymysql import cursors
 
-# 数据库连接信息
-host = 'rm-2zejbaw68504567cdgo.mysql.rds.aliyuncs.com'
-port = 3307
-user = 'kongdq'
-passwd = 'Qq452211'
-db_name = 'asdf'
+#
+dbparams = {
+    'host': 'rm-2zejbaw68504567cdgo.mysql.rds.aliyuncs.com',
+    'port': 3307,
+    'user': 'kongdq',
+    'password': 'Qq452211',
+    'database': 'test123',
+    'charset': 'utf8',
+    'cursorclass': cursors.DictCursor
+}
 
 
 # 链接数据库，判断是否存在，不存在创建
 def connect_net():
     try:
+        database = dbparams['database']
+        dbparams.pop('database')
         # 获取一个数据库连接，注意如果是UTF-8类型的，需要制定数据库
-        conn = pymysql.connect(host=host, port=port, user=user, passwd=passwd, charset='utf8')
-
+        conn = pymysql.connect(**dbparams)
         cur = conn.cursor()
         # 确定该表是否存在
-        query = "show databases like '" + db_name + "'"
+        query = "show databases like '" + database + "'"
         flag = cur.execute(query)
         if flag == 0:
-            create_db(conn)
+            create_db(conn, database)
         else:
-            conn.select_db(db_name)
+            conn.select_db(database)
 
+        dbparams['database'] = database
     except Exception as e:
         print("数据库链接失败！！" + e)
 
@@ -30,10 +37,10 @@ def connect_net():
 
 
 # 创建数据库
-def create_db(conn):
+def create_db(conn, database):
     cur = conn.cursor()
-    cur.execute('create database if not exists ' + db_name)
-    conn.select_db(db_name)
+    cur.execute('create database if not exists ' + database)
+    conn.select_db(database)
 
 
 #
@@ -47,13 +54,13 @@ def create_column_list_table(conn):
         sql = '''
             create table column_list(
             id int(11) not null auto_increment primary key,
+            column_id varchar(32) not null,
             title varchar(255) not null,
-            detail_url varchar(255) not null,
+            img_url varchar(255) ,
             introduce varchar(255) ,
             author varchar(32) ,
             author_portrait varchar(128) ,
-            browse varchar(32) ,
-            label varchar(128) ,
+            pageview varchar(32) ,
             issue_time datetime ,
             store_time datetime ,
             reserved varchar(128) )DEFAULT CHARSET=utf8;
@@ -71,13 +78,9 @@ def create_column_detail_table(conn):
         sql = '''
             create table column_detail(
             id int(11) not null auto_increment primary key,
+            column_id varchar(32) not null,
             title varchar(255) not null,
-            detail_url varchar(255) not null,
             content longtext ,
-            author varchar(32) ,
-            browse varchar(32) ,
-            source varchar(128) ,
-            compile varchar(128) ,
             issue_time datetime ,
             store_time datetime ,
             reserved varchar(128) )DEFAULT CHARSET=utf8;

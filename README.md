@@ -1,5 +1,6 @@
 # finance
 scrapy框架使用。
+chromedriver插件使用
 动态网页数据爬取
 
 

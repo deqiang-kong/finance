@@ -13,6 +13,7 @@ import scrapy
 class ColumnItem(scrapy.Item):
     id = scrapy.Field()
     title = scrapy.Field()
+    img_url = scrapy.Field()
     detail_url = scrapy.Field()
     introduce = scrapy.Field()
     author = scrapy.Field()
@@ -25,14 +26,9 @@ class ColumnItem(scrapy.Item):
 
 # 专栏详情数据字段
 class ColumnDetailItem(scrapy.Item):
-    detail_url = scrapy.Field()
+    id = scrapy.Field()
     title = scrapy.Field()
     content = scrapy.Field()
-
-    author = scrapy.Field()
-    browse = scrapy.Field()
-    source = scrapy.Field()
-    compile = scrapy.Field()
     issue_time = scrapy.Field()
 
     pass

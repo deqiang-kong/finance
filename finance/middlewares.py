@@ -30,9 +30,10 @@ class SeleniumDownloadMiddleware(object):
                 showMore = self.driver.find_element_by_id('custom-click-loade')
                 showMore.click()
 
-                if index > 2:
+                # 便于测试，不加载太多页
+                if index > 10:
                     break
-                time.sleep(4)
+                time.sleep(3)
                 if not showMore:
                     break
         except:

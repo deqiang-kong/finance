@@ -21,7 +21,7 @@ def connect_net():
         # 获取一个数据库连接，注意如果是UTF-8类型的，需要制定数据库
         conn = pymysql.connect(**dbparams)
         cur = conn.cursor()
-        # 确定该表是否存在
+        # 确定该库是否存在
         query = "show databases like '" + database + "'"
         flag = cur.execute(query)
         if flag == 0:
